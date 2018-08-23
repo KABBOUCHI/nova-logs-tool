@@ -5,6 +5,8 @@
 
 This Nova tool for logs
 
+![screenshot of the backup tool](https://raw.githubusercontent.com/KABBOUCHI/nova-logs-tool/master/docs/screenshot.png)
+
 Behind the scenes [kabbouchi/laravel-ward](https://github.com/KABBOUCHI/laravel-ward) is used.
 
 ## Installation
