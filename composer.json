@@ -1,0 +1,54 @@
+{
+    "name": "kabbouchi/nova-logs-tool",
+    "description": "A tool to for logs",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "homepage": "https://github.com/KABBOUCHI/nova-logs-tool",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Georges KABBOUCHI",
+            "email": "georges.kabbouchi@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.0",
+        "kabbouchi/laravel-ward": "^0.1.0",
+        "laravel/nova": "*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.6",
+        "phpunit/phpunit": "7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "KABBOUCHI\\LogsTool\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "KABBOUCHI\\LogsTool\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "KABBOUCHI\\LogsTool\\LogsToolServiceProvider"
+            ]
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../nova-lib"
+        }
+    ],
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
