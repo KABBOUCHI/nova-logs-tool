@@ -135,8 +135,8 @@
         </div>
 
         <transition name="modal" v-if="showLog" @click.self="showLog = null">
-            <div class="pin absolute flex items-center justify-center bg-modal">
-                <div class="bg-white p-4 w-full h-full text-center overflow-y-scroll flex flex-col" style="z-index:100">
+            <div class="pin absolute flex items-center justify-center bg-modal" style="z-index:100">
+                <div class="bg-white p-4 w-full h-full text-center overflow-y-scroll flex flex-col">
                     <div class="mb-4 text-grey-darker">
                    <span class="whitespace-no-wrap flex flex-col items-center">
                                         <icon-error width="100px" v-if="showLog.level === 'error'"></icon-error>
