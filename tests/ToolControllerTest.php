@@ -2,10 +2,6 @@
 
 namespace KABBOUCHI\LogsTool\Tests;
 
-use KABBOUCHI\LogsTool\Http\Controllers\LogsController;
-use KABBOUCHI\LogsTool\LogsTool;
-use Symfony\Component\HttpFoundation\Response;
-
 class ToolControllerTest extends TestCase
 {
     /** @test */
