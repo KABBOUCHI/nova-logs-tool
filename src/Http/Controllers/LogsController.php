@@ -2,40 +2,41 @@
 
 namespace KABBOUCHI\LogsTool\Http\Controllers;
 
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Routing\Controller;
 use KABBOUCHI\Ward\Ward;
+use Illuminate\Routing\Controller;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class LogsController extends Controller
 {
-	public function index()
-	{
-		Ward::setFile($file = request()->input('file', 'laravel.log'));
+    public function index()
+    {
+        Ward::setFile($file = request()->input('file', 'laravel.log'));
 
-		$logs = Ward::all();
+        $logs = Ward::all();
 
-		$currentPage = LengthAwarePaginator::resolveCurrentPage();
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
 
-		$collection = collect($logs);
+        $collection = collect($logs);
 
-		$search = request()->input('search');
+        $search = request()->input('search');
 
-		if ($search)
-			$collection = $collection->filter(function ($log) use ($search) {
-				return false !== stristr($log['text'], $search);
-			});
+        if ($search) {
+            $collection = $collection->filter(function ($log) use ($search) {
+                return false !== stristr($log['text'], $search);
+            });
+        }
 
-		$perPage = 6;
+        $perPage = 6;
 
-		$currentPageSearchResults = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values()->toArray();
+        $currentPageSearchResults = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values()->toArray();
 
-		return new LengthAwarePaginator($currentPageSearchResults, count($collection), $perPage);
-	}
+        return new LengthAwarePaginator($currentPageSearchResults, count($collection), $perPage);
+    }
 
-	public function dailyLogFiles()
-	{
-		return collect(Ward::getFiles(true))->filter(function ($file) {
-			return strpos($file, 'laravel') === 0;
-		});
-	}
+    public function dailyLogFiles()
+    {
+        return collect(Ward::getFiles(true))->filter(function ($file) {
+            return strpos($file, 'laravel') === 0;
+        });
+    }
 }
