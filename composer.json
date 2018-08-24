@@ -1,6 +1,6 @@
 {
     "name": "kabbouchi/nova-logs-tool",
-    "description": "A tool to for logs",
+    "description": "A Laravel Nova tool to manage and keep track of each one of your logs files.",
     "keywords": [
         "laravel",
         "nova"
