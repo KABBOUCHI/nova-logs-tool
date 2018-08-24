@@ -3,7 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/kabbouchi/nova-logs-tool.svg?style=flat-square)](https://packagist.org/packages/kabbouchi/nova-logs-tool)
 [![Total Downloads](https://img.shields.io/packagist/dt/kabbouchi/nova-logs-tool.svg?style=flat-square)](https://packagist.org/packages/kabbouchi/nova-logs-tool)
 
-This Nova tool for logs
+A Laravel Nova tool to manage and keep track of each one of your logs files.
 
 ![screenshot of the backup tool](https://raw.githubusercontent.com/KABBOUCHI/nova-logs-tool/master/docs/screenshot.png)
 
