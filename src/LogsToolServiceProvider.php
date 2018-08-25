@@ -2,8 +2,8 @@
 
 namespace KABBOUCHI\LogsTool;
 
-use KABBOUCHI\Ward\Ward;
 use Laravel\Nova\Nova;
+use KABBOUCHI\Ward\Ward;
 use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -52,8 +52,8 @@ class LogsToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-		Ward::auth(function () {
-			return true;
-		});
+        Ward::auth(function () {
+            return true;
+        });
     }
 }
