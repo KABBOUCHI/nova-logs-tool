@@ -17,7 +17,23 @@
             </div>
 
 
-            <div v-if="!loading" class="p-3 flex items-center border-b border-50">
+            <div v-if="!loading && files.length" class="p-3 flex items-center border-b border-50">
+
+                <button
+                        @click.prevent="download"
+                        title="Download"
+                        class="cursor-pointer text-70 hover:text-primary mr-3"
+                >
+                    <icon type="download"/>
+                </button>
+                <button
+                        title="Delete"
+                        class="cursor-pointer text-70 hover:text-primary mr-3"
+                        @click.prevent="openDeleteModal"
+                >
+                    <icon type="delete"/>
+                </button>
+
                 <select
                         class="form-control form-select"
                         v-model="file" @change="changeFile"
@@ -97,6 +113,17 @@
                         </table>
                     </div>
 
+                    <div v-if="!logs.data.length" class="flex justify-center items-center px-6 py-8">
+                        <div class="text-center">
+
+                            <icon type="search" class="mb-3" width="50" height="50"  style="color: #A8B9C5"></icon>
+
+                            <h3 class="text-base text-80 font-normal mb-6">
+                                No Logs.
+                            </h3>
+                        </div>
+                    </div>
+
                     <div class="bg-20 rounded-b">
                         <nav v-if="logs.data.length > 0" class="flex">
                             <!-- Previous Link -->
@@ -153,7 +180,10 @@
                                     </span>
                     </div>
                     <div class="mb-8 flex-1">
-                      <pre id="output" class="w-full h-full p-2 text-left"><code class="language-bash"  style="white-space: pre-wrap" ref="outputCode" v-text="showLog.text"></code></pre>
+                        <pre id="output" class="w-full h-full p-2 text-left"><code class="language-bash"
+                                                                                   style="white-space: pre-wrap"
+                                                                                   ref="outputCode"
+                                                                                   v-text="showLog.text"></code></pre>
                     </div>
                     <div class="flex justify-center">
                         <button class="flex-no-shrink text-info py-2 px-4 rounded" @click="showLog = null">
@@ -163,6 +193,26 @@
                 </div>
             </div>
         </transition>
+
+        <portal to="modals">
+            <transition name="fade">
+                <delete-resource-modal
+                        v-if="deleteModalOpen"
+                        @confirm="confirmDelete"
+                        @close="closeDeleteModal"
+                        mode="delete"
+                >
+                    <div class="p-8">
+                        <heading :level="2" class="mb-6">
+                            Delete Log file
+                        </heading>
+                        <p class="text-80 leading-normal">
+                            Are you sure you want to delete this '{{this.file}}' file?
+                        </p>
+                    </div>
+                </delete-resource-modal>
+            </transition>
+        </portal>
     </div>
 </template>
 
@@ -186,6 +236,7 @@
     export default {
         data() {
             return {
+                deleteModalOpen : false,
                 search: null,
                 loading: true,
                 file: 'laravel.log',
@@ -224,6 +275,9 @@
             },
         },
         methods: {
+            download() {
+                window.open(`/nova-vendor/KABBOUCHI/logs-tool/logs/${this.file}`, '_parent');
+            },
             getDailyLogFiles() {
                 return api.getDailyLogFiles().then(files => {
                     this.files = files;
@@ -265,7 +319,20 @@
                 this.$nextTick(() => {
                     Prism.highlightElement(this.$refs.outputCode)
                 })
-            }
+            },
+            openDeleteModal() {
+                this.deleteModalOpen = true;
+            },
+            closeDeleteModal() {
+                this.deleteModalOpen = false;
+            },
+            async confirmDelete() {
+                this.deleteModalOpen = false;
+                await api.deleteFile(this.file);
+
+                await this.getDailyLogFiles();
+                await this.getLogs();
+            },
         }
     }
 </script>

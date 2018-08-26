@@ -39,4 +39,23 @@ class LogsController extends Controller
             return strpos($file, 'laravel') === 0;
         });
     }
+
+	/**
+	 * @param $log
+	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+	 * @throws \Exception
+	 */
+	public function show($log)
+	{
+		return response()->download(Ward::pathToLogFile($log));
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function destroy()
+	{
+		app('files')->delete(Ward::pathToLogFile(request('file')));
+		cache()->clear();
+	}
 }

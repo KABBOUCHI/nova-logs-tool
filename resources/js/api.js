@@ -8,5 +8,9 @@ export default {
         return window.axios.get(`/nova-vendor/KABBOUCHI/logs-tool/daily-log-files`)
             .then(response => response.data);
     },
+    deleteFile(file) {
+        return window.axios.delete(`/nova-vendor/KABBOUCHI/logs-tool/logs?file=${file}`)
+            .then(response => response.data);
+    },
 
 }

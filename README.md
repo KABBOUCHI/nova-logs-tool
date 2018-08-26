@@ -1,4 +1,4 @@
-# [WIP] Nova tool to for logs
+# Nova tool to for logs
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/kabbouchi/nova-logs-tool.svg?style=flat-square)](https://packagist.org/packages/kabbouchi/nova-logs-tool)
 [![Total Downloads](https://img.shields.io/packagist/dt/kabbouchi/nova-logs-tool.svg?style=flat-square)](https://packagist.org/packages/kabbouchi/nova-logs-tool)
