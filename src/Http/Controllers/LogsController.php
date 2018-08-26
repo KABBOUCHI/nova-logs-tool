@@ -40,22 +40,22 @@ class LogsController extends Controller
         });
     }
 
-	/**
-	 * @param $log
-	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-	 * @throws \Exception
-	 */
-	public function show($log)
-	{
-		return response()->download(Ward::pathToLogFile($log));
-	}
+    /**
+     * @param $log
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \Exception
+     */
+    public function show($log)
+    {
+        return response()->download(Ward::pathToLogFile($log));
+    }
 
-	/**
-	 * @throws \Exception
-	 */
-	public function destroy()
-	{
-		app('files')->delete(Ward::pathToLogFile(request('file')));
-		cache()->clear();
-	}
+    /**
+     * @throws \Exception
+     */
+    public function destroy()
+    {
+        app('files')->delete(Ward::pathToLogFile(request('file')));
+        cache()->clear();
+    }
 }
