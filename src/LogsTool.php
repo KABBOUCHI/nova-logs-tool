@@ -14,8 +14,8 @@ class LogsTool extends BaseTool
      */
     public function boot()
     {
-        Nova::script('nova-logs-tool', __DIR__.'/../dist/js/tool.js');
-        Nova::style('nova-logs-tool', __DIR__.'/../dist/css/tool.css');
+        Nova::script('LogsTool', __DIR__.'/../dist/js/tool.js');
+        Nova::style('LogsTool', __DIR__.'/../dist/css/tool.css');
     }
 
     /**
@@ -25,6 +25,6 @@ class LogsTool extends BaseTool
      */
     public function renderNavigation()
     {
-        return view('nova-logs-tool::navigation');
+        return view('LogsTool::navigation');
     }
 }

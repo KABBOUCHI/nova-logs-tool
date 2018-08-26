@@ -18,7 +18,7 @@ class LogsToolServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'nova-logs-tool');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'LogsTool');
 
         $this->app->booted(function () {
             $this->routes();
@@ -41,7 +41,7 @@ class LogsToolServiceProvider extends ServiceProvider
         }
 
         Route::middleware(['nova', Authorize::class])
-                ->prefix('nova-vendor/KABBOUCHI/nova-logs-tool')
+                ->prefix('nova-vendor/KABBOUCHI/logs-tool')
                 ->group(__DIR__.'/../routes/api.php');
     }
 
