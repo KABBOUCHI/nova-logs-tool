@@ -24,7 +24,7 @@
                         title="Download"
                         class="cursor-pointer text-70 hover:text-primary mr-3"
                 >
-                    <icon type="download"/>
+                    <icon type="download" view-box="0 0 24 24" width="24" height="24" />
                 </button>
                 <button
                         title="Delete"
