@@ -5,7 +5,7 @@
 
 A Laravel Nova tool to manage and keep track of each one of your logs files.
 
-![screenshot of the backup tool](https://raw.githubusercontent.com/KABBOUCHI/nova-logs-tool/master/docs/screenshot.png)
+![screenshot of the backup tool](https://raw.githubusercontent.com/KABBOUCHI/nova-logs-tool/master/docs/screenshot.png?20180828)
 
 Behind the scenes [kabbouchi/laravel-ward](https://github.com/KABBOUCHI/laravel-ward) is used.
 
