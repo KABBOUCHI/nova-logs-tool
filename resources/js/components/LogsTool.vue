@@ -24,7 +24,7 @@
                         title="Download"
                         class="cursor-pointer text-70 hover:text-primary mr-3"
                 >
-                    <icon type="download" view-box="0 0 24 24" width="24" height="24" />
+                    <icon type="download" view-box="0 0 24 24" width="24" height="24"/>
                 </button>
                 <button
                         title="Delete"
@@ -116,7 +116,7 @@
                     <div v-if="!logs.data.length" class="flex justify-center items-center px-6 py-8">
                         <div class="text-center">
 
-                            <icon type="search" class="mb-3" width="50" height="50"  style="color: #A8B9C5"></icon>
+                            <icon type="search" class="mb-3" width="50" height="50" style="color: #A8B9C5"></icon>
 
                             <h3 class="text-base text-80 font-normal mb-6">
                                 No Logs.
@@ -163,9 +163,9 @@
 
         <transition name="modal" v-if="showLog" @click.self="showLog = null">
             <div class="pin absolute flex items-center justify-center bg-modal" style="z-index:100">
-                <div class="bg-white p-4 w-full h-full text-center overflow-y-scroll flex flex-col">
+                <div class="bg-white p-4 w-full h-full text-center overflow-y-scroll flex flex-col relative">
                     <div class="mb-4 text-grey-darker">
-                   <span class="whitespace-no-wrap flex flex-col items-center">
+                        <span class="whitespace-no-wrap flex flex-col items-center">
                                         <icon-error width="100px" v-if="showLog.level === 'error'"></icon-error>
                                         <icon-info width="100px" v-if="showLog.level === 'info'"></icon-info>
                                         <icon-warning width="100px" v-if="showLog.level === 'warning'"></icon-warning>
@@ -179,15 +179,26 @@
                                     <span class="mt-3">{{ showLog.date }}</span>
                                     </span>
                     </div>
-                    <div class="mb-8 flex-1">
-                        <pre id="output" class="w-full h-full p-2 text-left"><code class="language-bash"
-                                                                                   style="white-space: pre-wrap"
-                                                                                   ref="outputCode"
-                                                                                   v-text="showLog.text"></code></pre>
+                    <div class="mb-4 flex-1">
+                        <pre class="w-full text-left"><code class="language-bash"
+                                                            style="white-space: pre-wrap"
+                                                            ref="outputCodeMessage"
+                                                            v-text="'[message]\n' + showLog.text"></code></pre>
+                        <pre class="w-full text-left"><code class="language-bash"
+                                                            style="white-space: pre-wrap"
+                                                            ref="outputCodeStack"
+                                                            v-text="showLog.stack"></code>
+                        </pre>
+
                     </div>
-                    <div class="flex justify-center">
+                    <div class="pin-r pin-t absolute p-2">
                         <button class="flex-no-shrink text-info py-2 px-4 rounded" @click="showLog = null">
-                            Ok
+                            OK
+                        </button>
+                    </div>
+                    <div class="">
+                        <button class="flex-no-shrink text-info py-2 px-4 rounded" @click="showLog = null">
+                            OK
                         </button>
                     </div>
                 </div>
@@ -236,7 +247,7 @@
     export default {
         data() {
             return {
-                deleteModalOpen : false,
+                deleteModalOpen: false,
                 search: null,
                 loading: true,
                 file: 'laravel.log',
@@ -256,6 +267,7 @@
         mounted() {
         },
         async created() {
+            document.addEventListener('keydown', this.handleKeydown);
             await this.getDailyLogFiles();
             await this.getLogs();
         },
@@ -275,6 +287,11 @@
             },
         },
         methods: {
+            handleKeydown(e) {
+                if (e.code === 'Escape') {
+                   this.showLog = null;
+                }
+            },
             download() {
                 window.open(`/nova-vendor/KABBOUCHI/logs-tool/logs/${this.file}`, '_parent');
             },
@@ -317,7 +334,8 @@
             viewLog(log) {
                 this.showLog = log;
                 this.$nextTick(() => {
-                    Prism.highlightElement(this.$refs.outputCode)
+                    Prism.highlightElement(this.$refs.outputCodeMessage)
+                    Prism.highlightElement(this.$refs.outputCodeStack)
                 })
             },
             openDeleteModal() {
