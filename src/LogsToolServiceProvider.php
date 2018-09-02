@@ -3,7 +3,6 @@
 namespace KABBOUCHI\LogsTool;
 
 use Laravel\Nova\Nova;
-use KABBOUCHI\Ward\Ward;
 use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
