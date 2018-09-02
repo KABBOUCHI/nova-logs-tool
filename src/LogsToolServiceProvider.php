@@ -52,8 +52,6 @@ class LogsToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        Ward::auth(function () {
-            return true;
-        });
+        //
     }
 }
