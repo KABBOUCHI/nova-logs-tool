@@ -26,7 +26,7 @@ class LogsController extends Controller
             });
         }
 
-        $perPage = 6;
+        $perPage = env('NOVA_LOGS_PER_PAGE', 6);
 
         $currentPageSearchResults = $collection->slice(($currentPage - 1) * $perPage, $perPage)->values()->toArray();
 
