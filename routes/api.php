@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('logs', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@index');
+Route::get('logs/permissions', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@permissions');
 Route::get('logs/{log}', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@show');
 Route::get('daily-log-files', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@dailyLogFiles');
 Route::delete('logs', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@destroy');

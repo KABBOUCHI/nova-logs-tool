@@ -12,5 +12,9 @@ export default {
         return Nova.request().delete(`/nova-vendor/KABBOUCHI/logs-tool/logs?file=${file}`)
             .then(response => response.data);
     },
+    getLogsPermissions(file) {
+        return Nova.request().get(`/nova-vendor/KABBOUCHI/logs-tool/logs/permissions`)
+            .then(response => response.data);
+    },
 
 }

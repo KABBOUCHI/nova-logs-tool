@@ -20,6 +20,7 @@
             <div v-if="!loading && files.length" class="p-3 flex items-center border-b border-50">
 
                 <button
+                        v-if="permissions.canDownload"
                         @click.prevent="download"
                         title="Download"
                         class="cursor-pointer text-70 hover:text-primary mr-3"
@@ -27,6 +28,7 @@
                     <icon type="download" view-box="0 0 24 24" width="24" height="24"/>
                 </button>
                 <button
+                        v-if="permissions.canDelete"
                         title="Delete"
                         class="cursor-pointer text-70 hover:text-primary mr-3"
                         @click.prevent="openDeleteModal"
@@ -260,7 +262,8 @@
                     data: false,
                     current_page: 1
                 },
-                showLog: null
+                showLog: null,
+                permissions: {}
             }
         },
         components: {IconError, IconInfo, IconWarning, IconEmergency, IconAlert, IconCritical, IconNotice, IconDebug},
@@ -268,6 +271,7 @@
         },
         async created() {
             document.addEventListener('keydown', this.handleKeydown);
+            await this.getLogsPermissions();
             await this.getDailyLogFiles();
             await this.getLogs();
         },
@@ -289,11 +293,17 @@
         methods: {
             handleKeydown(e) {
                 if (e.code === 'Escape') {
-                   this.showLog = null;
+                    this.showLog = null;
                 }
             },
             download() {
-                window.open(`/nova-vendor/KABBOUCHI/logs-tool/logs/${this.file}`, '_parent');
+                window.open(`/nova-vendor/KABBOUCHI/logs-tool/logs/${this.file}?time=${new Date().getTime()}`, '_parent');
+            },
+            getLogsPermissions() {
+                return api.getLogsPermissions().then(permissions => {
+                    this.permissions = permissions;
+                });
+
             },
             getDailyLogFiles() {
                 return api.getDailyLogFiles().then(files => {

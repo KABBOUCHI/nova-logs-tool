@@ -33,6 +33,30 @@ public function tools()
 }
 ```
 
+## Authorization
+```php
+// in app/Providers/NovaServiceProvder.php
+
+// ...
+
+public function tools()
+{
+    return [
+        // ...
+        (new \KABBOUCHI\LogsTool\LogsTool())
+                ->canSee(function ($request) {
+                    return true;
+                })
+                ->canDownload(function ($request) {
+                    return true;
+                })
+                ->canDelete(function ($request) {
+                    return false;
+                }),
+    ];
+}
+```
+
 ## Usage
 
 Click on the "nova-logs-tool" menu item in your Nova app to see the tool provided by this package.

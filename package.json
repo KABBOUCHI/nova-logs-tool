@@ -13,7 +13,8 @@
     "devDependencies": {
         "cross-env": "^5.0.0",
         "laravel-mix": "^1.0",
-        "prettier": "^1.14.0"
+        "prettier": "^1.14.0",
+        "vue-template-compiler": "^2.5.17"
     },
     "dependencies": {
         "animated-scroll-to": "^1.2.2",

@@ -2,6 +2,8 @@
 
 namespace KABBOUCHI\LogsTool\Http\Controllers;
 
+use Illuminate\Http\Request;
+use KABBOUCHI\LogsTool\LogsTool;
 use KABBOUCHI\Ward\Ward;
 use Illuminate\Routing\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -40,22 +42,38 @@ class LogsController extends Controller
         });
     }
 
-    /**
-     * @param $log
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     * @throws \Exception
-     */
-    public function show($log)
-    {
-        return response()->download(Ward::pathToLogFile($log));
-    }
+	/**
+	 * @param $log
+	 * @param Request $request
+	 * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+	 * @throws \Exception
+	 */
+	public function show($log,Request $request)
+	{
+		if (!LogsTool::authorizedToDownload($request))
+			abort(403);
 
-    /**
-     * @throws \Exception
-     */
-    public function destroy()
-    {
-        app('files')->delete(Ward::pathToLogFile(request('file')));
-        cache()->clear();
-    }
+		return response()->download(Ward::pathToLogFile($log));
+	}
+
+	/**
+	 * @param Request $request
+	 * @throws \Exception
+	 */
+	public function destroy(Request $request)
+	{
+		if (!LogsTool::authorizedToDelete($request))
+			abort(403);
+
+		app('files')->delete(Ward::pathToLogFile(request('file')));
+		cache()->clear();
+	}
+
+	public function permissions(Request $request)
+	{
+		return [
+			'canDownload' => LogsTool::authorizedToDownload($request),
+			'canDelete'   => LogsTool::authorizedToDelete($request),
+		];
+	}
 }
