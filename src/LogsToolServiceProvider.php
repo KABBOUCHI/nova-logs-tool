@@ -19,6 +19,9 @@ class LogsToolServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'LogsTool');
 
+		$this->publishes([__DIR__ . '/../config/nova-logs-tool.php' => config_path('nova-logs-tool.php')
+		], 'nova-logs-tool-config');
+
         $this->app->booted(function () {
             $this->routes();
         });
@@ -51,6 +54,6 @@ class LogsToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+		$this->mergeConfigFrom(__DIR__ . '/../config/nova-logs-tool.php', 'nova-logs-tool');
     }
 }
