@@ -39,7 +39,7 @@ class LogsController extends Controller
     {
         return collect(Ward::getFiles(true))->filter(function ($file) {
             return strpos($file, 'laravel') === 0;
-        });
+        })->values()->all();
     }
 
     /**
