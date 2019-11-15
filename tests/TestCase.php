@@ -3,8 +3,8 @@
 namespace KABBOUCHI\LogsTool\Tests;
 
 use Illuminate\Support\Facades\Route;
-use Orchestra\Testbench\TestCase as Orchestra;
 use KABBOUCHI\LogsTool\LogsToolServiceProvider;
+use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {

@@ -2,11 +2,11 @@
 
 namespace KABBOUCHI\LogsTool\Http\Controllers;
 
-use KABBOUCHI\Ward\Ward;
 use Illuminate\Http\Request;
-use KABBOUCHI\LogsTool\LogsTool;
-use Illuminate\Routing\Controller;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Controller;
+use KABBOUCHI\LogsTool\LogsTool;
+use KABBOUCHI\Ward\Ward;
 
 class LogsController extends Controller
 {

@@ -2,11 +2,11 @@
 
 namespace KABBOUCHI\LogsTool;
 
-use Laravel\Nova\Nova;
-use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use KABBOUCHI\LogsTool\Http\Middleware\Authorize;
+use Laravel\Nova\Events\ServingNova;
+use Laravel\Nova\Nova;
 
 class LogsToolServiceProvider extends ServiceProvider
 {

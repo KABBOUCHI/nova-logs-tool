@@ -2,8 +2,8 @@
 
 namespace KABBOUCHI\LogsTool;
 
-use Laravel\Nova\Nova;
 use Illuminate\Http\Request;
+use Laravel\Nova\Nova;
 use Laravel\Nova\Tool as BaseTool;
 
 class LogsTool extends BaseTool
