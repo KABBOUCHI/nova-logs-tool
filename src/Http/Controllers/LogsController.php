@@ -38,7 +38,7 @@ class LogsController extends Controller
     public function dailyLogFiles()
     {
         return collect(Ward::getFiles(true))->filter(function ($file) {
-            return strpos($file, 'laravel') === 0;
+            return preg_match(config('nova-logs-tool.regexForFiles'), $file);
         })->values()->all();
     }
 

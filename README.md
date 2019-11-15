@@ -61,6 +61,13 @@ public function tools()
 
 Click on the "nova-logs-tool" menu item in your Nova app to see the tool provided by this package.
 
+Possible environment variables:
+
+``` env
+NOVA_LOGS_PER_PAGE=6
+NOVA_LOGS_REGEX_FOR_FILES="/^laravel/"
+```
+
 ### Testing
 
 ``` bash
