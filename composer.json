@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "kabbouchi/laravel-ward": "^0.2.0",
+        "kabbouchi/laravel-ward": "^0.3.0",
         "laravel/nova": "*"
     },
     "require-dev": {
