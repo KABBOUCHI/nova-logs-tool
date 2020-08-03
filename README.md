@@ -43,12 +43,13 @@ public function tools()
 {
     return [
         // ...
+        // don't return plain `true` value or anyone can see/download/delete the logs, make sure to check if user has permission.
         (new \KABBOUCHI\LogsTool\LogsTool())
                 ->canSee(function ($request) {
-                    return true;
+                    return auth()->user()->canSee(); 
                 })
                 ->canDownload(function ($request) {
-                    return true;
+                    return  auth()->user()->canDownload();
                 })
                 ->canDelete(function ($request) {
                     return false;
