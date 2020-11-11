@@ -34,6 +34,12 @@ public function tools()
 }
 ```
 
+Publish the package configuration file.
+
+```bash
+php artisan vendor:publish --provider="KABBOUCHI\LogsTool\LogsToolServiceProvider"
+```
+
 ## Authorization
 ```php
 // in app/Providers/NovaServiceProvder.php
