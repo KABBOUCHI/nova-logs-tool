@@ -42,7 +42,7 @@ class LogsTool extends BaseTool
     }
 
     /**
-     * @param \Closure $closure
+     * @param  \Closure  $closure
      * @return $this
      */
     public function canDownload(\Closure $closure)
@@ -53,7 +53,7 @@ class LogsTool extends BaseTool
     }
 
     /**
-     * @param \Closure $closure
+     * @param  \Closure  $closure
      * @return $this
      */
     public function canDelete(\Closure $closure)
