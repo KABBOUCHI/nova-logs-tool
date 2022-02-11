@@ -44,8 +44,9 @@ class LogsController extends Controller
 
     /**
      * @param $log
-     * @param Request $request
+     * @param  Request  $request
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     *
      * @throws \Exception
      */
     public function show($log, Request $request)
@@ -58,7 +59,8 @@ class LogsController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param  Request  $request
+     *
      * @throws \Exception
      */
     public function destroy(Request $request)
