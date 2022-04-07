@@ -22,14 +22,14 @@
                 <button
                         v-if="permissions.canDownload"
                         @click.prevent="download"
-                        title="Download"
+                        :title="{{ __('Download') }}"
                         class="cursor-pointer text-70 hover:text-primary mr-3"
                 >
                     <icon type="download" view-box="0 0 24 24" width="24" height="24"/>
                 </button>
                 <button
                         v-if="permissions.canDelete"
-                        title="Delete"
+                        :title="{{ __('Delete') }}"
                         class="cursor-pointer text-70 hover:text-primary mr-3"
                         @click.prevent="openDeleteModal"
                 >
@@ -64,17 +64,17 @@
                             <tr>
                                 <th class="text-left" style="width: 100px">
                                     <span class="cursor-pointer inline-flex items-center">
-                                    Level
+                                    {{ __('Level') }}
                                     </span>
                                 </th>
                                 <th class="text-left" style="width: 140px">
                                     <span class="cursor-pointer inline-flex items-center">
-                                     Created at
+                                    {{ __('Created at') }}
                                     </span>
                                 </th>
                                 <th class="text-left">
                                     <span class="cursor-pointer inline-flex items-center">
-                                     Message
+                                     {{ __('Message') }}
                                     </span>
                                 </th>
                                 <th></th>
@@ -121,7 +121,7 @@
                             <icon type="search" class="mb-3" width="50" height="50" style="color: #A8B9C5"></icon>
 
                             <h3 class="text-base text-80 font-normal mb-6">
-                                No Logs.
+                                {{ __('No Logs.') }}
                             </h3>
                         </div>
                     </div>
@@ -140,7 +140,7 @@
                                     @click.prevent="selectPreviousPage()"
                                     dusk="previous"
                             >
-                                {{__('Previous')}}
+                                {{ __('Previous') }}
                             </button>
 
                             <!-- Next Link -->
@@ -155,7 +155,7 @@
                                     @click.prevent="selectNextPage()"
                                     dusk="next"
                             >
-                                {{__('Next')}}
+                                {{ __('Next') }}
                             </button>
                         </nav>
                     </div>
@@ -195,12 +195,12 @@
                     </div>
                     <div class="pin-r pin-t absolute p-2">
                         <button class="flex-no-shrink text-info py-2 px-4 rounded" @click="showLog = null">
-                            OK
+                            {{ __('OK') }}
                         </button>
                     </div>
                     <div class="">
                         <button class="flex-no-shrink text-info py-2 px-4 rounded" @click="showLog = null">
-                            OK
+                            {{ __('OK') }}
                         </button>
                     </div>
                 </div>
@@ -217,10 +217,10 @@
                 >
                     <div class="p-8">
                         <heading :level="2" class="mb-6">
-                            Delete Log file
+                            {{ __('Delete Log file') }}
                         </heading>
                         <p class="text-80 leading-normal">
-                            Are you sure you want to delete this '{{this.file}}' file?
+                            {{ __('Are you sure you want to delete this') }} + this.file + __('file') + '?'
                         </p>
                     </div>
                 </delete-resource-modal>
