@@ -17,7 +17,7 @@
     "require": {
         "php": ">=7.1.0",
         "kabbouchi/laravel-ward": "^0.5.0",
-        "laravel/nova": "*"
+        "laravel/nova": "^1.0|^2.0|^3.0"
     },
     "require-dev": {
         "orchestra/testbench": "^3.6",
