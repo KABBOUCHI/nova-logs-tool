@@ -3,7 +3,7 @@ Nova.booting((Vue, router) => {
         {
             name: 'LogsTool',
             path: '/logs',
-            component: require('./components/LogsTool.vue'),
-        },
-    ])
-})
+            component: require('./components/LogsTool.vue')
+        }
+    ]);
+});
