@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use KABBOUCHI\LogsTool\Http\Controllers\LogsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('logs', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@index');
-Route::get('logs/permissions', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@permissions');
-Route::get('logs/{log}', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@show');
-Route::get('daily-log-files', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@dailyLogFiles');
-Route::delete('logs', \KABBOUCHI\LogsTool\Http\Controllers\LogsController::class.'@destroy');
+Route::get('logs', [LogsController::class, 'index']);
+Route::get('logs/permissions', [LogsController::class, 'permissions']);
+Route::get('logs/{log}', [LogsController::class, 'show']);
+Route::get('daily-log-files', [LogsController::class, 'dailyLogFiles']);
+Route::delete('logs', [LogsController::class, 'destroy']);

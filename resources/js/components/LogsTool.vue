@@ -1,123 +1,138 @@
 <template>
-    <div>
-        <heading class="mb-3"> {{ __('Logs') }}</heading>
-        <div class="flex justify-between">
-            <div class="relative h-9 flex items-center mb-6">
-                <icon type="search" class="absolute ml-3 text-70" />
+    <div class="text-xs">
+        <Head :title="__('Logs')" />
 
-                <input
-                    class="appearance-none form-control form-input w-search pl-search"
-                    placeholder="Search"
+        <Heading class="mb-3"> {{ __('Logs') }}</Heading>
+
+        <div class="flex items-center justify-between mb-6">
+            <div class="relative h-9 w-full md:w-1/3 md:flex-shrink-0">
+                <Icon
                     type="search"
-                    v-model="search"
+                    width="20"
+                    class="absolute ml-2 text-gray-400"
+                    :style="{ top: '4px' }"
+                />
+
+                <RoundInput
+                    class="appearance-none g-white dark:bg-gray-800 shadow rounded-full h-8 w-full dark:focus:bg-gray-800"
+                    :placeholder="__('Search')"
+                    type="search"
+                    @input="performSearch"
+                    spellcheck="false"
+                    :aria-label="__('Search')"
                     @keydown.stop="performSearch"
                 />
             </div>
 
-            <div v-if="!loading && files.length" class="p-3 flex items-center border-b border-50">
+            <div v-if="!loading && files.length" class="flex items-center">
                 <button
                     v-if="permissions.canDownload"
                     @click.prevent="download"
                     :title="__('Download')"
-                    class="cursor-pointer text-70 hover:text-primary mr-3"
+                    class="toolbar-button px-2"
+                    v-tooltip.click="__('Download')"
                 >
-                    <icon type="download" view-box="0 0 24 24" width="24" height="24" />
+                    <Icon type="download" />
                 </button>
+
                 <button
                     v-if="permissions.canDelete"
                     :title="__('Delete')"
-                    class="cursor-pointer text-70 hover:text-primary mr-3"
-                    @click.prevent="openDeleteModal"
+                    class="toolbar-button px-2"
+                    @click.stop="openDeleteModal"
+                    v-tooltip.click="__('Delete')"
                 >
-                    <icon type="delete" />
+                    <Icon type="trash" />
                 </button>
 
-                <select class="form-control form-select" v-model="file" @change="changeFile">
+                <DeleteResourceModal
+                    :show="deleteModalOpen"
+                    @close="closeDeleteModal"
+                    @confirm="confirmDelete"
+                    mode="delete"
+                >
+                    <slot>
+                        <ModalHeader v-text="__('Delete log file')" />
+                        <ModalContent>
+                            <p class="leading-normal">
+                                {{
+                                    __("Are you sure you want to delete this ':fileName' file?", {
+                                        fileName: this.file
+                                    })
+                                }}
+                            </p>
+                        </ModalContent>
+                    </slot>
+                </DeleteResourceModal>
+
+                <select class="ml-2 form-control form-select form-select-bordered" v-model="file" @change="changeFile">
                     <option v-for="file in files" v-text="file"></option>
                 </select>
             </div>
         </div>
-        <div class="relative" :class="{ 'overflow-hidden': loading }">
-            <div v-if="loading" class="flex items-center justify-center z-50 p-6" style="min-height: 150px">
-                <loader class="text-60" />
-            </div>
-            <template v-else>
-                <card>
+
+        <Card>
+            <LoadingView :loading="loading">
+                <div v-if="logs.data.length > 0">
                     <div class="overflow-hidden overflow-x-auto relative">
-                        <table v-if="logs.data.length > 0" class="table w-full" cellpadding="0" cellspacing="0">
-                            <thead>
+                        <table class="w-full table-default">
+                            <thead class="bg-gray-50 dark:bg-gray-800">
                                 <tr>
-                                    <th class="text-left" style="width: 100px">
-                                        <span class="cursor-pointer inline-flex items-center">
-                                            {{ __('Level') }}
-                                        </span>
+                                    <th class="uppercase text-xxs text-gray-500 tracking-wide pl-5 pr-2 py-2" style="width: 100px">
+                                        {{ __('Level') }}
                                     </th>
-                                    <th class="text-left" style="width: 140px">
-                                        <span class="cursor-pointer inline-flex items-center">
-                                            {{ __('Created at') }}
-                                        </span>
+                                    <th class="uppercase text-xxs text-gray-500 tracking-wide pl-5 pr-2 py-2" style="width: 140px">
+                                        {{ __('Created at') }}
                                     </th>
-                                    <th class="text-left">
-                                        <span class="cursor-pointer inline-flex items-center">
-                                            {{ __('Message') }}
-                                        </span>
+                                    <th class="uppercase text-xxs text-gray-500 tracking-wide pl-5 pr-2 py-2">
+                                        {{ __('Message') }}
                                     </th>
                                     <th></th>
                                 </tr>
                             </thead>
 
-                            <tbody v-for="(log, index) in logs.data">
-                                <tr class="hover:bg-blue-lightest">
-                                    <td>
-                                        <span class="whitespace-no-wrap flex flex-col items-center">
-                                            <icon-error v-if="log.level === 'error'"></icon-error>
-                                            <icon-info v-if="log.level === 'info'"></icon-info>
-                                            <icon-warning v-if="log.level === 'warning'"></icon-warning>
-                                            <icon-emergency v-if="log.level === 'emergency'"></icon-emergency>
-                                            <icon-alert v-if="log.level === 'alert'"></icon-alert>
-                                            <icon-critical v-if="log.level === 'critical'"></icon-critical>
-                                            <icon-notice v-if="log.level === 'notice'"></icon-notice>
-                                            <icon-debug v-if="log.level === 'debug'"></icon-debug>
-                                            <span>{{ log.level }}</span>
-                                        </span>
+                            <tbody>
+                                <tr
+                                    v-for="(log, index) in logs.data"
+                                    :key="index"
+                                    class="group"
+                                    @click.stop="viewLog(log)"
+                                >
+                                    <td
+                                        class="px-6 py-2 border-t border-gray-100 dark:border-gray-700 dark:bg-gray-800 group-hover:bg-gray-50 dark:group-hover:bg-gray-900 cursor-pointer"
+                                    >
+                                        <div class="flex flex-col items-center">
+                                            <component :is="`icon-${log.level}`"></component>
+                                            <span class="mt-2">{{ log.level }}</span>
+                                        </div>
                                     </td>
-                                    <td>
-                                        <span class="whitespace-no-wrap">{{ log.date }}</span>
+                                    <td class="px-6 py-2 border-t border-gray-100 dark:border-gray-700 dark:bg-gray-800 group-hover:bg-gray-50 dark:group-hover:bg-gray-900 cursor-pointer">
+                                        {{ log.date }}
                                     </td>
-                                    <td>
-                                        <span class="text-sm text-grey-darker"> {{ log.text }}</span>
+                                    <td class="px-6 py-2 border-t border-gray-100 dark:border-gray-700 dark:bg-gray-800 group-hover:bg-gray-50 dark:group-hover:bg-gray-900 cursor-pointer">
+                                        {{ log.text }}
                                     </td>
-
-                                    <td class="td-fit text-right pr-6">
-                                        <span @click="viewLog(log)">
-                                            <icon type="view" width="22" height="18" view-box="0 0 22 16" />
-                                        </span>
+                                    <td class="px-6 py-2 border-t border-gray-100 dark:border-gray-700 dark:bg-gray-800 group-hover:bg-gray-50 dark:group-hover:bg-gray-900 cursor-pointer">
+                                        <button
+                                            class="toolbar-button px-2"
+                                            @click.prevent="viewLog(log)"
+                                            v-tooltip.click="__('View')"
+                                        >
+                                            <Icon type="eye"/>
+                                        </button>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <div v-if="!logs.data.length" class="flex justify-center items-center px-6 py-8">
-                        <div class="text-center">
-                            <icon type="search" class="mb-3" width="50" height="50" style="color: #A8B9C5"></icon>
-
-                            <h3 class="text-base text-80 font-normal mb-6">
-                                {{ __('No Logs.') }}
-                            </h3>
-                        </div>
-                    </div>
-
-                    <div class="bg-20 rounded-b">
+                    <div class="border-t dark:border-gray-700">
                         <nav v-if="logs.data.length > 0" class="flex">
                             <!-- Previous Link -->
                             <button
                                 :disabled="!hasPreviousPages"
-                                class="btn btn-link py-3 px-4"
-                                :class="{
-                                    'text-primary dim': hasPreviousPages,
-                                    'text-80 opacity-50': !hasPreviousPages
-                                }"
+                                class="btn btn-link py-3 px-4 font-bold"
+                                :class="hasPreviousPages ? 'text-primary-500 hover:text-primary-400' : 'text-gray-300 dark:text-gray-600' "
                                 rel="prev"
                                 @click.prevent="selectPreviousPage()"
                                 dusk="previous"
@@ -128,11 +143,8 @@
                             <!-- Next Link -->
                             <button
                                 :disabled="!hasMorePages"
-                                class="ml-auto btn btn-link py-3 px-4"
-                                :class="{
-                                    'text-primary dim': hasMorePages,
-                                    'text-80 opacity-50': !hasMorePages
-                                }"
+                                class="ml-auto btn btn-link py-3 px-4 font-bold"
+                                :class="hasMorePages ? 'text-primary-500 hover:text-primary-400' : 'text-gray-300 dark:text-gray-600' "
                                 rel="next"
                                 @click.prevent="selectNextPage()"
                                 dusk="next"
@@ -141,75 +153,47 @@
                             </button>
                         </nav>
                     </div>
-                </card>
-            </template>
-        </div>
 
-        <transition name="modal" v-if="showLog" @click.self="showLog = null">
-            <div class="pin absolute flex items-center justify-center bg-modal" style="z-index:100">
-                <div class="bg-white p-4 w-full h-full text-center overflow-y-scroll flex flex-col relative">
-                    <div class="mb-4 text-grey-darker">
-                        <span class="whitespace-no-wrap flex flex-col items-center">
-                            <icon-error width="100px" v-if="showLog.level === 'error'"></icon-error>
-                            <icon-info width="100px" v-if="showLog.level === 'info'"></icon-info>
-                            <icon-warning width="100px" v-if="showLog.level === 'warning'"></icon-warning>
-                            <icon-emergency width="100px" v-if="showLog.level === 'emergency'"></icon-emergency>
-                            <icon-alert width="100px" v-if="showLog.level === 'alert'"></icon-alert>
-                            <icon-critical v-if="showLog.level === 'critical'"></icon-critical>
-                            <icon-notice width="100px" v-if="showLog.level === 'notice'"></icon-notice>
-                            <icon-debug width="100px" v-if="showLog.level === 'debug'"></icon-debug>
-                            <span class="mt-3">{{ showLog.level.toUpperCase() }}</span>
-                            <span class="mt-3">{{ showLog.date }}</span>
-                        </span>
-                    </div>
-                    <div class="mb-4 flex-1">
-                        <pre class="w-full text-left"><code class="language-bash"
-                                                            style="white-space: pre-wrap"
-                                                            ref="outputCodeMessage"
-                                                            v-text="'[message]\n' + showLog.text"></code></pre>
-                        <pre class="w-full text-left"><code class="language-bash"
-                                                            style="white-space: pre-wrap"
-                                                            ref="outputCodeStack"
-                                                            v-text="showLog.stack"></code>
-                        </pre>
-                    </div>
-                    <div class="pin-r pin-t absolute p-2">
-                        <button class="flex-no-shrink text-info py-2 px-4 rounded" @click="showLog = null">
-                            {{ __('OK') }}
-                        </button>
-                    </div>
-                    <div class="">
-                        <button class="flex-no-shrink text-info py-2 px-4 rounded" @click="showLog = null">
-                            {{ __('OK') }}
-                        </button>
-                    </div>
                 </div>
-            </div>
-        </transition>
+                <div v-else class="w-full flex flex-col items-center justify-center min-h-40">
+                    <Icon type="search" class="h-14 w-14" />
+                    <span>No Logs</span>
+                </div>
+            </LoadingView>
+        </Card>
 
-        <portal to="modals">
-            <transition name="fade">
-                <delete-resource-modal
-                    v-if="deleteModalOpen"
-                    @confirm="confirmDelete"
-                    @close="closeDeleteModal"
-                    mode="delete"
-                >
-                    <div class="p-8">
-                        <heading :level="2" class="mb-6">
-                            {{ __('Delete Log file') }}
-                        </heading>
-                        <p class="text-80 leading-normal">
-                            {{
-                                __("Are you sure you want to delete this ':fileName' file?", {
-                                    fileName: this.file
-                                })
-                            }}
-                        </p>
-                    </div>
-                </delete-resource-modal>
-            </transition>
-        </portal>
+        <Modal
+            :show="showLog"
+            @close="showLog = null"
+            @close-via-escape="showLog = null"
+        >
+            <div class="bg-white rounded-md dark:bg-gray-800">
+                <slot>
+                    <ModalContent>
+                        <div class="flex">
+                            <button class="ml-auto px-4 py-2 font-bold text-gray-400 hover:text-gray-300 dark:text-gray-500 dark:hover:text-gray-400" type="button" @click.prevent="showLog = null">
+                                <Icon type="x" />
+                            </button>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <component :is="`icon-${showLog.level}`" width="100px"></component>
+                            <span class="mt-2 uppercase">{{ showLog.level }}</span>
+                            <span class="mt-2">{{ showLog.date }}</span>
+                        </div>
+                        <div>
+                        <pre class="text-left dark:bg-gray-700"><code class="language-bash whitespace-pre-wrap" ref="outputCodeMessage" v-text="'[message]\n' + showLog.text" /></pre>
+                            <pre class="text-left dark:bg-gray-700"><code class="language-bash whitespace-pre-wrap" ref="outputCodeStack" v-text="showLog.stack" /></pre>
+                        </div>
+                    </ModalContent>
+                    <ModalFooter>
+                        <button class="ml-auto px-4 py-2 font-bold text-gray-400 hover:text-gray-300 dark:text-gray-500 dark:hover:text-gray-400" type="button" @click.prevent="showLog = null">
+                            Close
+                        </button>
+                    </ModalFooter>
+                </slot>
+            </div>
+        </Modal>
+
     </div>
 </template>
 
@@ -228,6 +212,7 @@ import IconDebug from './icons/IconDebug';
 
 import Prism from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-bash';
+import {Tab} from "@headlessui/vue";
 
 export default {
     data() {
@@ -249,14 +234,27 @@ export default {
             permissions: {}
         };
     },
-    components: { IconError, IconInfo, IconWarning, IconEmergency, IconAlert, IconCritical, IconNotice, IconDebug },
+    components: {
+        Tab,
+        IconError,
+        IconInfo,
+        IconWarning,
+        IconEmergency,
+        IconAlert,
+        IconCritical,
+        IconNotice,
+        IconDebug
+    },
+
     mounted() {},
+
     async created() {
         document.addEventListener('keydown', this.handleKeydown);
         await this.getLogsPermissions();
         await this.getDailyLogFiles();
         await this.getLogs();
     },
+
     computed: {
         /**
          * Determine if prior pages are available.
@@ -272,20 +270,24 @@ export default {
             return Boolean(this.logs && this.logs.next_page_url);
         }
     },
+
     methods: {
         handleKeydown(e) {
             if (e.code === 'Escape') {
                 this.showLog = null;
             }
         },
+
         download() {
             window.open(`/nova-vendor/KABBOUCHI/logs-tool/logs/${this.file}?time=${new Date().getTime()}`, '_parent');
         },
+
         getLogsPermissions() {
             return api.getLogsPermissions().then(permissions => {
                 this.permissions = permissions;
             });
         },
+
         getDailyLogFiles() {
             return api.getDailyLogFiles().then(files => {
                 this.files = files;
@@ -295,6 +297,7 @@ export default {
                 }
             });
         },
+
         getLogs(page = 1) {
             this.loading = true;
 
@@ -304,21 +307,30 @@ export default {
                 this.loading = false;
             });
         },
+
         changeFile() {
             this.search = null;
             this.getLogs();
         },
+
         selectPreviousPage() {
             this.getLogs(this.logs.current_page - 1);
         },
+
         selectNextPage() {
             this.getLogs(this.logs.current_page + 1);
         },
-        performSearch() {
+
+        performSearch(event) {
+            if (event) {
+                this.search = event.target.value
+            }
+
             this.$nextTick(() => {
                 this.getLogs();
             });
         },
+
         viewLog(log) {
             this.showLog = log;
             this.$nextTick(() => {
@@ -326,19 +338,22 @@ export default {
                 Prism.highlightElement(this.$refs.outputCodeStack);
             });
         },
+
         openDeleteModal() {
             this.deleteModalOpen = true;
         },
+
         closeDeleteModal() {
             this.deleteModalOpen = false;
         },
+
         async confirmDelete() {
             this.deleteModalOpen = false;
             await api.deleteFile(this.file);
 
             await this.getDailyLogFiles();
             await this.getLogs();
-        }
+        },
     }
 };
 </script>

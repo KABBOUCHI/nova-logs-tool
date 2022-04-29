@@ -15,9 +15,9 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=8",
         "kabbouchi/laravel-ward": "^0.5.0",
-        "laravel/nova": "^1.0|^2.0|^3.0"
+        "laravel/nova": "^4"
     },
     "require-dev": {
         "orchestra/testbench": "^3.6",
@@ -40,12 +40,6 @@
             ]
         }
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../nova-lib"
-        }
-    ],
     "config": {
         "sort-packages": true
     },
