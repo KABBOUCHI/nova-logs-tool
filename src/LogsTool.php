@@ -20,7 +20,6 @@ class LogsTool extends BaseTool
     public function boot()
     {
         Nova::script('LogsTool', __DIR__.'/../dist/js/tool.js');
-        Nova::style('LogsTool', __DIR__.'/../dist/css/tool.css');
     }
 
     /**

@@ -14,13 +14,8 @@
         "@vue/compiler-sfc": "^3.2.22",
         "laravel-mix": "^6.0.41",
         "prettier": "^1.14.0",
-        "postcss": "^8.3.11",
         "vue-loader": "^16.8.3",
-        "animated-scroll-to": "^1.2.2",
-        "prismjs": "^1.21.0",
-        "sass-loader": "^12.6.0",
-        "resolve-url-loader": "^5.0.0",
-        "sass": "^1.51.0"
+        "prismjs": "^1.21.0"
     },
     "dependencies": {}
 }
