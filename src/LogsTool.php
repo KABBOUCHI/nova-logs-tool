@@ -3,6 +3,7 @@
 namespace KABBOUCHI\LogsTool;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool as BaseTool;
 
@@ -19,16 +20,20 @@ class LogsTool extends BaseTool
     public function boot()
     {
         Nova::script('LogsTool', __DIR__.'/../dist/js/tool.js');
+        Nova::style('LogsTool', __DIR__.'/../dist/css/tool.css');
     }
 
     /**
-     * Build the view that renders the navigation links for the tool.
+     * Build the menu that renders the navigation links for the tool.
      *
-     * @return \Illuminate\View\View
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
      */
-    public function renderNavigation()
+    public function menu(Request $request)
     {
-        return view('LogsTool::navigation');
+        return MenuSection::make('Logs')
+            ->path('/logs-tool')
+            ->icon('document-duplicate');
     }
 
     public static function authorizedToDownload(Request $request)

@@ -17,14 +17,12 @@ class LogsToolServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'LogsTool');
-
-        $this->publishes([__DIR__.'/../config/nova-logs-tool.php' => config_path('nova-logs-tool.php'),
-        ], 'nova-logs-tool-config');
-
         $this->app->booted(function () {
             $this->routes();
         });
+
+        $this->publishes([__DIR__.'/../config/nova-logs-tool.php' => config_path('nova-logs-tool.php'),
+        ], 'nova-logs-tool-config');
 
         Nova::serving(function (ServingNova $event) {
             //
@@ -42,9 +40,12 @@ class LogsToolServiceProvider extends ServiceProvider
             return;
         }
 
+        Nova::router(['nova', Authorize::class], 'logs-tool')
+            ->group(__DIR__.'/../routes/inertia.php');
+
         Route::middleware(['nova', Authorize::class])
-                ->prefix('nova-vendor/KABBOUCHI/logs-tool')
-                ->group(__DIR__.'/../routes/api.php');
+            ->prefix('nova-vendor/KABBOUCHI/logs-tool')
+            ->group(__DIR__.'/../routes/api.php');
     }
 
     /**
