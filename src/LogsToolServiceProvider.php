@@ -40,10 +40,10 @@ class LogsToolServiceProvider extends ServiceProvider
             return;
         }
 
-        Nova::router(['nova', Authorize::class], 'logs-tool')
+        Nova::router(['nova:api', Authorize::class], 'logs-tool')
             ->group(__DIR__.'/../routes/inertia.php');
 
-        Route::middleware(['nova', Authorize::class])
+        Route::middleware(['nova:api', Authorize::class])
             ->prefix('nova-vendor/KABBOUCHI/logs-tool')
             ->group(__DIR__.'/../routes/api.php');
     }
